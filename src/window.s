@@ -110,6 +110,15 @@ drawchar:
 #
 # ADD YOUR IMPLEMENTATION HERE
 drawline:
+push %esi
+
+mov $10, %eax
+mov $10, %ebx
+mov $'J', %cl
+mov $9, %ch
+call drawchar
+
+pop %esi
  ret
 
 ################################################################################
