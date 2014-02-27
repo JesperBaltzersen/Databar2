@@ -116,6 +116,7 @@ drawchar:
 # length = 		edx
 # Decoration on stack
 drawline:
+
 push %esi
 
 
