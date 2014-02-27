@@ -109,17 +109,95 @@ drawchar:
 # Decoration and color are passed on the stack.
 #
 # ADD YOUR IMPLEMENTATION HERE
+#
+# X pos   = 	eax
+# Y pos   = 	ebx
+# Direction = 	ecx
+# length = 		edx
+# Decoration on stack
 drawline:
 push %esi
 
-mov $10, %eax
-mov $10, %ebx
-mov $'J', %cl
-mov $9, %ch
+
+
+cmp $1, %ecx 	#choose algorithm from value of direction
+je .loop1		#moves to .loop1 if direction = 1, else .loop0
+
+.loop0: #loop over rows
+mov 8(%esp), %ecx	#move decoration to %ecx
+
+cmp $0, %edx			#if length (edx) is 0 we are done with this line
+je .doneDrawing
+
+
+push %eax
+push %ebx
+push %ecx
+push %edx
+
 call drawchar
 
+pop %edx
+pop %ecx
+pop %ebx
+pop %eax
+
+inc %eax				#increment which x pos we write to
+dec %edx				#decrement length
+
+cmp scrwidth, %eax
+jge .doneDrawing
+
+jmp .loop0				#run loop again
+
+
+.loop1: #loop over columns
+mov 8(%esp), %ecx		#move decoration to %ecx
+
+cmp $0, %edx			#if length (edx) is 0 we are done with this line
+je .doneDrawing
+
+cmp scrwidth, %eax
+jge .doneDrawing
+
+push %eax
+push %ebx
+push %ecx
+push %edx
+
+call drawchar
+
+pop %edx
+pop %ecx
+pop %ebx
+pop %eax
+
+inc %ebx				#increment which x pos we write to
+dec %edx				#decrement length
+
+cmp scrheight, %ebx
+jge .doneDrawing
+
+
+
+
+jmp .loop1				#run loop again
+
+.doneDrawing:
 pop %esi
  ret
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 # ClearRect
