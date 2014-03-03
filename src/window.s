@@ -203,10 +203,10 @@ push %ecx
 	push %ecx
 	push %edx
 
-	mov $'J', %cl              # Character
-	mov $7, %ch                # Color
-	#mov 0x0, %ch
-	#mov 0x0, %cl
+	#mov $'J', %cl              # Character
+	#mov $7, %ch                # Color
+	mov $0x0, %ch
+	mov $0x0, %cl
 	call drawchar
 
 	pop %edx
