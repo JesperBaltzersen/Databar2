@@ -173,32 +173,17 @@ pop %ecx
 pop %ebx
 pop %eax
 
-inc %ebx				#increment which x pos we write to
+inc %ebx				#increment the x pos we write to
 dec %edx				#decrement length
 
 cmp scrheight, %ebx
 jge .doneDrawing
-
-
-
 
 jmp .loop1				#run loop again
 
 .doneDrawing:
 pop %esi
  ret
-
-
-
-
-
-
-
-
-
-
-
-
 
 ################################################################################
 # ClearRect
@@ -208,7 +193,43 @@ pop %esi
 #
 # ADD YOUR IMPLEMENTATION HERE
 clearrect:
- ret
+.loopY:	#loop rows
+push %eax
+push %ecx
+
+	.loopX: #loop columns
+	push %eax
+	push %ebx
+	push %ecx
+	push %edx
+
+	mov $'J', %cl              # Character
+	mov $7, %ch                # Color
+	#mov 0x0, %ch
+	#mov 0x0, %cl
+	call drawchar
+
+	pop %edx
+	pop %ecx
+	pop %ebx
+	pop %eax
+
+	inc %eax	#increment x pos to draw to
+	dec %ecx	#decrement length of
+	cmp $0, %ecx	#check if length y pos has been reached
+	jge .loopX	#loop
+
+pop %ecx	#reset couter for x length
+pop %eax	#reset value of eax so we can count again
+inc %ebx
+dec %edx
+cmp $0, %edx	#check if length y pos has been reached
+je .doneClearing
+
+jmp .loopY	#loop again if y length != 0 reached
+
+.doneClearing:
+ret
 
 ################################################################################
 # DrawWindow
