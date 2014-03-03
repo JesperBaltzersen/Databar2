@@ -216,15 +216,24 @@ push %ecx
 
 	inc %eax	#increment x pos to draw to
 	dec %ecx	#decrement length of
-	cmp $0, %ecx	#check if length y pos has been reached
-	jge .loopX	#loop
 
+	cmp scrwidth, %eax
+	jge .loopYBook
+
+	cmp $0, %ecx	#check if length y pos has been reached
+	jg .loopX	#loop
+
+
+.loopYBook:
 pop %ecx	#reset couter for x length
 pop %eax	#reset value of eax so we can count again
 inc %ebx
 dec %edx
 cmp $0, %edx	#check if length y pos has been reached
 je .doneClearing
+
+#cmp scrheight, %ebx
+#jge .doneClearing
 
 jmp .loopY	#loop again if y length != 0 reached
 
