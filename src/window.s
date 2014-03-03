@@ -116,20 +116,14 @@ drawchar:
 # length = 		edx
 # Decoration on stack
 drawline:
-
-push %esi
-
-
-
 cmp $1, %ecx 	#choose algorithm from value of direction
 je .loop1		#moves to .loop1 if direction = 1, else .loop0
 
 .loop0: #loop over rows
-mov 8(%esp), %ecx	#move decoration to %ecx
+mov 4(%esp), %ecx	#move decoration to %ecx
 
 cmp $0, %edx			#if length (edx) is 0 we are done with this line
 je .doneDrawing
-
 
 push %eax
 push %ebx
@@ -153,7 +147,7 @@ jmp .loop0				#run loop again
 
 
 .loop1: #loop over columns
-mov 8(%esp), %ecx		#move decoration to %ecx
+mov 4(%esp), %ecx		#move decoration to %ecx
 
 cmp $0, %edx			#if length (edx) is 0 we are done with this line
 je .doneDrawing
@@ -182,7 +176,6 @@ jge .doneDrawing
 jmp .loop1				#run loop again
 
 .doneDrawing:
-pop %esi
  ret
 
 ################################################################################
@@ -203,9 +196,7 @@ push %ecx
 	push %ecx
 	push %edx
 
-	#mov $'J', %cl              # Character
-	#mov $7, %ch                # Color
-	mov $0x0, %ch
+	mov $0x0, %ch	#write blanks to coordinates
 	mov $0x0, %cl
 	call drawchar
 
@@ -227,13 +218,14 @@ push %ecx
 .loopYBook:
 pop %ecx	#reset couter for x length
 pop %eax	#reset value of eax so we can count again
-inc %ebx
-dec %edx
+
+inc %ebx	#increment y pos (vertical)
+dec %edx	#decrement length counter of vertical line
 cmp $0, %edx	#check if length y pos has been reached
 je .doneClearing
 
-#cmp scrheight, %ebx
-#jge .doneClearing
+cmp scrheight, %ebx
+jge .doneClearing
 
 jmp .loopY	#loop again if y length != 0 reached
 
